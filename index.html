@@ -1,582 +1,473 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جدول المهام اليومية للرقية والعلاج</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Cairo & Tajawal -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'page-bg': '#F9F8F3',
-                        'card-bg': '#FFFFFF',
-                        'accent-green': '#1B4D3E',
-                        'hover-green': '#143B2F',
-                        'accent-blue': '#0275D8',
-                        'gold-border': '#D9A74A',
-                        'light-gold': '#FFFDF5',
-                        'teal-note': '#EBF7F5',
-                        'dark-gray': '#333333',
-                        'light-gray': '#E5E7EB'
-                    },
-                    fontFamily: {
-                        cairo: ['Cairo', 'sans-serif'],
-                        tajawal: ['Tajawal', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            background-color: #F8F6F0;
-            color: #2D3748;
-        }
-        .custom-checkbox {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid #A0AEC0;
-            border-radius: 4px;
-            outline: none;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-        .custom-checkbox:checked {
-            background-color: #1B4D3E;
-            border-color: #1B4D3E;
-        }
-        .custom-checkbox:checked::after {
-            content: '✓';
-            position: absolute;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: bold;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .task-row {
-            transition: background-color 0.15s ease;
-        }
-        .task-row:hover {
-            background-color: rgba(27, 77, 62, 0.02);
-        }
-        .completed-text {
-            text-decoration: line-through;
-            opacity: 0.65;
-        }
-        /* Toast notification styling */
-        #toast {
-            visibility: hidden;
-            min-width: 250px;
-            transition: opacity 0.3s, bottom 0.3s;
-        }
-        #toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 30px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جدول المهام اليومية للرقية والعلاج</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1e5631;
+      --primary-light: #4c9a2a;
+      --accent-color: #c8963e;
+      --bg-color: #f4f7f4;
+      --card-bg: #ffffff;
+      --text-color: #2c3e50;
+      --border-color: #e0e0e0;
+      --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px 10px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #eef2ee;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    p.subtitle {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    /* Progress Bar */
+    .progress-section {
+      background: #eaf2ea;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .progress-bar-bg {
+      background: #d0e1d0;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, var(--primary-light), var(--primary-color));
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+      border-radius: 6px;
+    }
+
+    /* Sections */
+    .section-title {
+      color: var(--primary-color);
+      font-size: 1.25rem;
+      margin: 25px 0 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-right: 4px solid var(--accent-color);
+      padding-right: 10px;
+    }
+
+    .task-card {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .task-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .task-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .task-checkbox {
+      width: 22px;
+      height: 22px;
+      margin-top: 2px;
+      cursor: pointer;
+      accent-color: var(--primary-color);
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .task-desc {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .task-steps {
+      margin-top: 8px;
+      padding-right: 18px;
+      font-size: 0.88rem;
+      color: #444;
+    }
+
+    .task-steps li {
+      margin-bottom: 4px;
+    }
+
+    /* Text Display Button & Accordion */
+    .text-toggle-btn {
+      background: #f0f6f0;
+      color: var(--primary-color);
+      border: 1px solid #cce0cc;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .text-toggle-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .quran-text-box {
+      display: none;
+      background: #fcfbf7;
+      border: 1px solid #f0e6d2;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 10px;
+      font-family: 'Amiri', serif;
+      font-size: 1.25rem;
+      line-height: 2.2;
+      color: #222;
+      text-align: justify;
+      position: relative;
+    }
+
+    .quran-text-box.active {
+      display: block;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 30px;
+    }
+
+    .reset-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+
+    .reset-btn:hover {
+      background: #c0392b;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .quran-text-box {
+        font-size: 1.15rem;
+        padding: 12px;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen py-8 px-3 sm:px-6 md:px-8">
+<body>
 
-    <!-- Reset Modal -->
-    <div id="resetModal" class="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl transform transition-all text-right">
-            <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
-                تأكيد بدء يوم جديد
-            </h3>
-            <p class="text-gray-600 mb-6 text-sm leading-relaxed">
-                هل أنت تأكد من إغلاق وإعادة ضبط جميع المهام ليوم جديد؟ سيؤدي ذلك إلى إلغاء تحديد جميع خانات الاختيار.
-            </p>
-            <div class="flex justify-end gap-3">
-                <button onclick="closeResetModal()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium">
-                    إلغاء
-                </button>
-                <button onclick="confirmReset()" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-hover-green transition text-sm font-medium shadow-sm">
-                    تأكيد وإعادة ضبط
-                </button>
-            </div>
-        </div>
+  <div class="container">
+    <header>
+      <h1>جدول المهام اليومية للرقية والعلاج</h1>
+      <p class="subtitle">برنامج يومي متكامل للتحصين والشفاء بإذن الله تعالى</p>
+    </header>
+
+    <!-- Progress Tracker -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>إنجاز اليوم:</span>
+        <span id="progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg z-50 text-sm font-medium opacity-0 flex items-center gap-2">
-        <i class="fa-solid fa-circle-check text-green-400"></i>
-        <span id="toastMessage">تم نسخ الرابط بنجاح!</span>
+    <!-- Section 1: Integrated Program -->
+    <h2 class="section-title">1. البرنامج المتكامل (بعد الفجر وقبل المغرب)</h2>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-1">
+        <div class="task-content">
+          <label for="task-1" class="task-title">رقية النفث والمسح (بعد صلاة الفجر وقبل المغرب)</label>
+          <div class="task-desc">اجمع كفيك وانفث فيهما نفثاً خفيفاً بعد كل مقطع، واقرأ ما يلي ثم امسح جسدك:</div>
+          <ul class="task-steps">
+            <li>سورة الفاتحة (7 مرات)</li>
+            <li>آية الكرسي (مرة واحدة)</li>
+            <li>
+              أوائل سورة البقرة (الآيات 1 - 5)
+              <button class="text-toggle-btn" onclick="toggleText('text-baqarah-start')">📖 عرض النص</button>
+              <div class="quran-text-box" id="text-baqarah-start">
+                الم ﴿١﴾ ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ ﴿٢﴾ الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ ﴿٣﴾ وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ ﴿٤﴾ أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ ﴿٥﴾
+              </div>
+            </li>
+            <li>
+              أواخر سورة البقرة (الآيات 285 - 286)
+              <button class="text-toggle-btn" onclick="toggleText('text-baqarah-end')">📖 عرض النص</button>
+              <div class="quran-text-box" id="text-baqarah-end">
+                آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ﴿٢٨٥﴾ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنتَ مَوْلَانَا فَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ ﴿٢٨٦﴾
+              </div>
+            </li>
+            <li>سورة الإخلاص، وسورة الفلق، وسورة الناس (3 مرات لكل سورة)</li>
+            <li><strong>مسح ما استطعت من الجسد باليدين بدءاً بالرأس والوجه وما أقبل من الجسد.</strong></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="max-w-3xl mx-auto space-y-6">
+    <!-- Section 2: Quran Recitation -->
+    <h2 class="section-title">2. الورد القرآني وآيات الرقية</h2>
 
-        <!-- Main Header Card -->
-        <div class="text-center space-y-4 pt-2">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-accent-green flex items-center justify-center gap-2 flex-wrap">
-                <span class="text-2xl">🌿</span>
-                <span>جدول المهام اليومية للرقية والعلاج</span>
-                <span class="text-2xl">🌿</span>
-            </h1>
-            <p class="text-gray-600 text-sm sm:text-base font-medium">
-                أسأل الله العظيم رب العرش العظيم أن يشفيك ويعافيك شفاءً لا يغادر سقماً
-            </p>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-                <button onclick="shareLink()" class="bg-accent-green hover:bg-hover-green text-white px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2 shadow-sm transition-all transform active:scale-95">
-                    <i class="fa-solid fa-link text-xs"></i>
-                    <span>نسخ رابط المشاركة</span>
-                </button>
-                <button onclick="openResetModal()" class="bg-[#8C7355] hover:bg-[#786146] text-white px-5 py-2.5 rounded-full font-medium text-sm flex items-center gap-2 shadow-sm transition-all transform active:scale-95">
-                    <i class="fa-solid fa-arrows-rotate text-xs"></i>
-                    <span>بدء يوم جديد</span>
-                </button>
-            </div>
-
-            <!-- Persistence Indicator / Toggle -->
-            <div class="inline-flex items-center gap-2 pt-2 text-xs text-gray-600 bg-white/60 px-3 py-1.5 rounded-lg border border-gray-200">
-                <input type="checkbox" id="autoSaveToggle" checked class="accent-accent-green w-4 h-4 rounded cursor-pointer" onchange="toggleAutoSave(this)">
-                <label for="autoSaveToggle" class="cursor-pointer select-none">علاماتك تُحفظ تلقائياً في هذا الجهاز</label>
-            </div>
-
-            <!-- Progress Bar Bar -->
-            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4 overflow-hidden border border-gray-100">
-                <div id="progressBar" class="bg-accent-green h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
-            <div class="text-xs text-gray-500 font-semibold text-left pl-1" id="progressText">0% مكتمل</div>
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-2">
+        <div class="task-content">
+          <label for="task-2" class="task-title">قراءة سورتي الصافات والأنفال</label>
+          <div class="task-desc">تلاوة سورة الصافات وسورة الأنفال كامليْن بنية الشفاء والدفع والتحصين.</div>
         </div>
-
-        <!-- Section 0: قبل البدء -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
-                <span class="text-xl">🕋</span>
-                <h2 class="text-lg font-bold text-accent-green">قبل البدء: أصول ينبغي استحضارها</h2>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('p0_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">اليقين التام أن الشافي هو الله وحده، والرقية سبب لا يُستقل بنفسه</span>
-                    <input type="checkbox" id="p0_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('p0_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الإخلاص لله، والرقية بالقرآن والأدعية المأثورة فقط</span>
-                    <input type="checkbox" id="p0_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('p0_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">يُستحسن أن يرقيك شخص ثقة (زوج/محرم) إن أمكن</span>
-                    <input type="checkbox" id="p0_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('p0_4')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">مراجعة طبيب مختص عند وجود أعراض جسدية، فالأخذ بالأسباب لا ينافي التوكل</span>
-                    <input type="checkbox" id="p0_4" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 1: الفجر والشروق -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-accent-green">الفجر والشروق</h2>
-                <span class="bg-accent-blue text-white text-xs font-bold px-2.5 py-1 rounded">1</span>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c1_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">قراءة أذكار الصباح كاملة</span>
-                    <input type="checkbox" id="c1_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c1_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">آية الكرسي + المعوذتين والإخلاص (3 مرات لكل منها)</span>
-                    <input type="checkbox" id="c1_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c1_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">"لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير" (100 مرة)</span>
-                    <input type="checkbox" id="c1_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c1_4')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">شرب كوب من ماء الرقية على الريق</span>
-                    <input type="checkbox" id="c1_4" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c1_5')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">قراءة آيات السحر (انظر القائمة أسفل الجدول)</span>
-                    <input type="checkbox" id="c1_5" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 2: الضحى إلى الظهيرة -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-accent-green">الضحى إلى الظهيرة</h2>
-                <span class="bg-accent-blue text-white text-xs font-bold px-2.5 py-1 rounded">2</span>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c2_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">المحافظة على الصلوات الخمس في وقتها، وصلاة الضحى إن تيسر</span>
-                    <input type="checkbox" id="c2_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c2_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">ورد يومي من سورة البقرة (أو تُقسّم على 3 أيام)</span>
-                    <input type="checkbox" id="c2_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c2_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">آيات السحر من الأعراف ويونس وطه</span>
-                    <input type="checkbox" id="c2_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 3: العصر -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-accent-green">العصر</h2>
-                <span class="bg-accent-blue text-white text-xs font-bold px-2.5 py-1 rounded">3</span>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c3_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الاستغفار: "أستغفر الله وأتوب إليه" (100 مرة فأكثر)</span>
-                    <input type="checkbox" id="c3_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c3_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الصلاة على النبي ﷺ بكثرة</span>
-                    <input type="checkbox" id="c3_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c3_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الصدقة ولو يسيرة، بنية دفع البلاء</span>
-                    <input type="checkbox" id="c3_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 4: المغرب والعشاء -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-accent-green">المغرب والعشاء</h2>
-                <span class="bg-accent-blue text-white text-xs font-bold px-2.5 py-1 rounded">4</span>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c4_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">قراءة أذكار المساء كاملة</span>
-                    <input type="checkbox" id="c4_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c4_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الاغتسال بماء مقروء عليه (يومياً أو يوماً بعد يوم)</span>
-                    <input type="checkbox" id="c4_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c4_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الدهان بزيت الزيتون المقروء عليه على مواضع الألم والرأس والصدر</span>
-                    <input type="checkbox" id="c4_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 5: قبل النوم -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                <h2 class="text-lg font-bold text-accent-green">قبل النوم</h2>
-                <span class="bg-accent-blue text-white text-xs font-bold px-2.5 py-1 rounded">5</span>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c5_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الوضوء</span>
-                    <input type="checkbox" id="c5_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c5_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">أذكار النوم (آية الكرسي وخواتيم البقرة)</span>
-                    <input type="checkbox" id="c5_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c5_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">جمع الكفين والنفث فيهما مع الإخلاص والفلق والناس، ومسح الجسد (3 مرات)</span>
-                    <input type="checkbox" id="c5_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c5_4')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الاستماع لرقية شرعية موثوقة بصوت هادئ</span>
-                    <input type="checkbox" id="c5_4" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 6: آيات الرقية المخصوصة بالسحر -->
-        <div class="bg-card-bg rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100/80">
-            <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
-                <span class="text-xl">📖</span>
-                <h2 class="text-lg font-bold text-accent-green">آيات الرقية المخصوصة بالسحر (ضمن الورد اليومي)</h2>
-            </div>
-            <div class="space-y-3">
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_1')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">الفاتحة</span>
-                    <input type="checkbox" id="c6_1" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_2')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">آية الكرسي (البقرة: 255)</span>
-                    <input type="checkbox" id="c6_2" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_3')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">خواتيم البقرة (285-286)</span>
-                    <input type="checkbox" id="c6_3" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_4')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">آيات السحر (الأعراف: 117-122، يونس: 79-82، طه: 65-70)</span>
-                    <input type="checkbox" id="c6_4" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_5')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">"وننزل من القرآن ما هو شفاء ورحمة للمؤمنين" (الإسراء: 82)</span>
-                    <input type="checkbox" id="c6_5" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-                <div class="border-b border-dashed border-gray-100"></div>
-
-                <div class="task-row flex items-start justify-between p-2 rounded-lg gap-3 cursor-pointer" onclick="toggleTask('c6_6')">
-                    <span class="text-sm sm:text-base text-gray-700 leading-relaxed pt-0.5">المعوذتان كاملتين</span>
-                    <input type="checkbox" id="c6_6" class="custom-checkbox mt-1" onclick="event.stopPropagation(); updateProgress();">
-                </div>
-            </div>
-        </div>
-
-        <!-- Box 7: تذكير واستحضار النية -->
-        <div class="bg-teal-note/70 rounded-2xl p-5 border border-teal-100/80 shadow-sm">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="text-xl">💡</span>
-                <h3 class="text-lg font-bold text-accent-green">تذكير واستحضار النية</h3>
-            </div>
-            <ul class="space-y-2 text-sm sm:text-base text-gray-700 pr-5 list-disc marker:text-accent-green">
-                <li>اليقين التام بأن الشفاء بيد الله وحده</li>
-                <li>الصبر والاستمرار ومقاومة أي فتور</li>
-                <li>التصدق ولو بشيء بسيط بنية الشفاء</li>
-            </ul>
-        </div>
-
-        <!-- Box 8: تنبيهات مهمة -->
-        <div class="bg-[#FFFDF5] rounded-2xl p-5 border-2 border-gold-border/60 shadow-sm">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="text-xl">⚠️</span>
-                <h3 class="text-lg font-bold text-[#A67C1E]">تنبيهات مهمة</h3>
-            </div>
-            <ul class="space-y-2.5 text-sm sm:text-base text-gray-800 pr-5 list-disc marker:text-[#A67C1E]">
-                <li>تجنّب أي وسيلة غير مشروعة (سحر مضاد، كهانة، طلاسم) ولو بنية العلاج</li>
-                <li>الاستماع بتدبر ينفع إن تعذّرت القراءة المباشرة</li>
-                <li>قد يطول العلاج أسابيع أو أشهراً، وتأخر الاستجابة لا يعني عدمها</li>
-                <li>يُفضّل استشارة طالب علم موثوق متخصص في هذا الباب لمتابعة الحالة</li>
-            </ul>
-        </div>
-
-        <!-- Footer -->
-        <footer class="text-center py-6 text-gray-500 font-medium text-sm">
-            جعل الله هذه الخطة سبباً في شفائك العاجل بإذنه تعالى
-        </footer>
-
+      </div>
     </div>
 
-    <script>
-        const STORAGE_KEY = 'ruqyah_checklist_state';
-        const AUTOSAVE_KEY = 'ruqyah_checklist_autosave';
-        let autoSaveEnabled = true;
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-3">
+        <div class="task-content">
+          <label for="task-3" class="task-title">قراءة آيات السحر</label>
+          <div class="task-desc">قراءة آيات إبطال السحر من سور (الأعراف، يونس، وطه).</div>
+          <button class="text-toggle-btn" onclick="toggleText('text-siher')">📖 عرض النص</button>
+          <div class="quran-text-box" id="text-siher">
+            <strong>سورة الأعراف (117-122):</strong><br>
+            وَأَوْحَيْنَا إِلَىٰ مُوسَىٰ أَنْ أَلْقِ عَصَاكَ ۖ فَإِذَا هِيَ تَلْقَفُ مَا يَأْفِكُونَ ﴿١١٧﴾ فَوَقَعَ الْحَقُّ وَبَطَلَ مَا كَانُوا يَعْمَلُونَ ﴿١١٨﴾ فَغُلِبُوا هُنَالِكَ وَانقَلَبُوا صَاغِرِينَ ﴿١١٩﴾ وَأُلْقِيَ السَّحَرَةُ سَاجِدِينَ ﴿١٢٠﴾ قَالُوا آمَنَّا بِرَبِّ الْعَالَمِينَ ﴿١٢١﴾ رَبِّ مُوسَىٰ وَهَارُونَ ﴿١٢٢〉<br><br>
+            <strong>سورة يونس (81-82):</strong><br>
+            فَلَمَّا أَلْقَوْا قَالَ مُوسَىٰ مَا جِئْتُم بِهِ السِّحْرُ ۖ إِنَّ اللَّهَ سَيُبْطِلُهُ ۖ إِنَّ اللَّهَ لَا يُصْلِحُ عَمَلَ الْمُفْسِدِينَ ﴿٨١﴾ وَيُحِقُّ اللَّهُ الْحَقَّ بِكَلِمَاتِهِ وَلَوْ كَرِهَ الْمُجْرِمُونَ ﴿٨٢〉<br><br>
+            <strong>سورة طه (69):</strong><br>
+            وَأَلْقِ مَا فِي يَمِينِكَ تَلْقَفْ مَا صَنَعُوا ۖ إِنَّمَا صَنَعُوا كَيْدُ سَاحِرٍ ۖ وَلَا يُفْلِحُ السَّاحِرُ حَيْثُ أَتَىٰ ﴿٦٩﴾
+          </div>
+        </div>
+      </div>
+    </div>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Load autosave state preference
-            const savedAutoSave = localStorage.getItem(AUTOSAVE_KEY);
-            if (savedAutoSave !== null) {
-                autoSaveEnabled = JSON.parse(savedAutoSave);
-                document.getElementById('autoSaveToggle').checked = autoSaveEnabled;
-            }
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-4">
+        <div class="task-content">
+          <label for="task-4" class="task-title">قراءة سورة البقرة</label>
+          <div class="task-desc">قراءة سورة البقرة كاملة (يومياً أو حسب الاستطاعة).</div>
+        </div>
+      </div>
+    </div>
 
-            // Load saved checklist states if auto-save is enabled
-            if (autoSaveEnabled) {
-                loadState();
-            } else {
-                updateProgress();
-            }
+    <!-- Section 3: Adhkar & Daily Practices -->
+    <h2 class="section-title">3. الأذكار والأعمال اليومية</h2>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-5">
+        <div class="task-content">
+          <label for="task-5" class="task-title">أذكار الصباح والمساء</label>
+          <div class="task-desc">المحافظة على أذكار الصباح بعد صلاة الفجر، وأذكار المساء بعد صلاة العصر.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-6">
+        <div class="task-content">
+          <label for="task-6" class="task-title">الاستغفار بكثرة</label>
+          <div class="task-desc">قول: "أستغفر الله وأتوب إليه" (100 مرة فأكثر خلال اليوم).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-7">
+        <div class="task-content">
+          <label for="task-7" class="task-title">الصلاة على النبي ﷺ</label>
+          <div class="task-desc">كثرة الصلاة والسلام على نبينا محمد ﷺ طوال اليوم.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-8">
+        <div class="task-content">
+          <label for="task-8" class="task-title">الصدقة</label>
+          <div class="task-desc">إخراج صدقة ولو يسيرة بنية الشفاء ودفع البلاء.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Physical Treatment -->
+    <h2 class="section-title">4. البرنامج العلاجي الحسي</h2>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-9">
+        <div class="task-content">
+          <label for="task-9" class="task-title">شرب الماء المقروء عليه</label>
+          <div class="task-desc">الشرب المستمر من الماء المقروء عليه الرقية طوال اليوم وعلى الريق.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-10">
+        <div class="task-content">
+          <label for="task-10" class="task-title">الإدهان بالزيت المقروء عليه</label>
+          <div class="task-desc">دهن الجسد أو مواضع الألم بزيوت مقروء عليها (مثل زيت الزيتون) قبل النوم.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-card">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" id="task-11">
+        <div class="task-content">
+          <label for="task-11" class="task-title">الاغتسال بماء الرقية</label>
+          <div class="task-desc">الاغتسال بماء مقروء عليه (يومياً أو يوماً بعد يوم).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="reset-btn" onclick="resetTasks()">إعادة ضبط يوم جديد</button>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Text visibility
+    function toggleText(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('active');
+    }
+
+    // Progress Tracker & Persistence
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    function updateProgress() {
+      const total = checkboxes.length;
+      let checkedCount = 0;
+
+      checkboxes.forEach((cb) => {
+        if (cb.checked) {
+          checkedCount++;
+        }
+        localStorage.setItem(cb.id, cb.checked);
+      });
+
+      const percentage = Math.round((checkedCount / total) * 100);
+      progressFill.style.width = percentage + '%';
+      progressText.textContent = percentage + '%';
+    }
+
+    function loadSavedState() {
+      checkboxes.forEach((cb) => {
+        const saved = localStorage.getItem(cb.id);
+        if (saved === 'true') {
+          cb.checked = true;
+        }
+      });
+      updateProgress();
+    }
+
+    function resetTasks() {
+      if (confirm('هل أنت تأكد من إعداد ضبط المهام لبدء يوم جديد؟')) {
+        checkboxes.forEach((cb) => {
+          cb.checked = false;
+          localStorage.removeItem(cb.id);
         });
+        updateProgress();
+      }
+    }
 
-        function toggleTask(id) {
-            const checkbox = document.getElementById(id);
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                updateProgress();
-            }
-        }
+    checkboxes.forEach((cb) => {
+      cb.addEventListener('change', updateProgress);
+    });
 
-        function updateProgress() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"].custom-checkbox');
-            let checkedCount = 0;
-
-            checkboxes.forEach(cb => {
-                const label = cb.previousElementSibling;
-                if (cb.checked) {
-                    checkedCount++;
-                    if (label) label.classList.add('completed-text');
-                } else {
-                    if (label) label.classList.remove('completed-text');
-                }
-            });
-
-            const total = checkboxes.length;
-            const percent = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
-
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-
-            if (progressBar) progressBar.style.width = percent + '%';
-            if (progressText) progressText.innerText = `${percent}% مكتمل (${checkedCount} من ${total})`;
-
-            if (autoSaveEnabled) {
-                saveState();
-            }
-        }
-
-        function saveState() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"].custom-checkbox');
-            const state = {};
-            checkboxes.forEach(cb => {
-                state[cb.id] = cb.checked;
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        }
-
-        function loadState() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (!saved) {
-                updateProgress();
-                return;
-            }
-
-            try {
-                const state = JSON.parse(saved);
-                Object.keys(state).forEach(id => {
-                    const cb = document.getElementById(id);
-                    if (cb) {
-                        cb.checked = state[id];
-                    }
-                });
-            } catch (e) {
-                console.error('Error loading saved state:', e);
-            }
-            updateProgress();
-        }
-
-        function toggleAutoSave(element) {
-            autoSaveEnabled = element.checked;
-            localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(autoSaveEnabled));
-            if (autoSaveEnabled) {
-                saveState();
-                showToast('تم تفعيل الحفظ التلقائي');
-            } else {
-                showToast('تم إيقاف الحفظ التلقائي');
-            }
-        }
-
-        function openResetModal() {
-            document.getElementById('resetModal').classList.remove('hidden');
-        }
-
-        function closeResetModal() {
-            document.getElementById('resetModal').classList.add('hidden');
-        }
-
-        function confirmReset() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"].custom-checkbox');
-            checkboxes.forEach(cb => {
-                cb.checked = false;
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-            closeResetModal();
-            showToast('تم إعادة ضبط المهام ليوم جديد');
-        }
-
-        function shareLink() {
-            const url = window.location.href;
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('تم نسخ رابط الصفحة بنجاح!');
-                }).catch(() => {
-                    fallbackCopyTextToClipboard(url);
-                });
-            } else {
-                fallbackCopyTextToClipboard(url);
-            }
-        }
-
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.top = "0";
-            textArea.style.left = "0";
-            textArea.style.position = "fixed";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast('تم نسخ رابط الصفحة بنجاح!');
-            } catch (err) {
-                showToast('عذراً، متعذر نسخ الرابط تلقائياً');
-            }
-            document.body.removeChild(textArea);
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            if (toast && toastMessage) {
-                toastMessage.innerText = message;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2500);
-            }
-        }
-    </script>
+    window.addEventListener('DOMContentLoaded', loadSavedState);
+  </script>
 </body>
 </html>
